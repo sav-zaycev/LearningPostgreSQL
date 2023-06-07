@@ -35,6 +35,30 @@ CREATE TABLE public.aircrafts (
 ALTER TABLE public.aircrafts OWNER TO postgres;
 
 --
+-- Name: birthdays; Type: TABLE; Schema: public; Owner: workstation
+--
+
+CREATE TABLE public.birthdays (
+    person text NOT NULL,
+    birthday date NOT NULL
+);
+
+
+ALTER TABLE public.birthdays OWNER TO workstation;
+
+--
+-- Name: databases; Type: TABLE; Schema: public; Owner: workstation
+--
+
+CREATE TABLE public.databases (
+    is_open_source boolean,
+    dbms_name text
+);
+
+
+ALTER TABLE public.databases OWNER TO workstation;
+
+--
 -- Name: pilot_hobbies; Type: TABLE; Schema: public; Owner: workstation
 --
 
@@ -51,8 +75,9 @@ ALTER TABLE public.pilot_hobbies OWNER TO workstation;
 --
 
 CREATE TABLE public.pilots (
-    pilot_name text,
-    schedule integer[]
+    pilor_name text,
+    schedule integer[],
+    meal text[]
 );
 
 
@@ -71,6 +96,18 @@ CREATE TABLE public.seats (
 
 
 ALTER TABLE public.seats OWNER TO postgres;
+
+--
+-- Name: test_bool; Type: TABLE; Schema: public; Owner: workstation
+--
+
+CREATE TABLE public.test_bool (
+    a boolean,
+    b text
+);
+
+
+ALTER TABLE public.test_bool OWNER TO workstation;
 
 --
 -- Name: test_numeric; Type: TABLE; Schema: public; Owner: workstation
@@ -140,6 +177,29 @@ SU9	Sukhoi SuperJet-100	7000
 
 
 --
+-- Data for Name: birthdays; Type: TABLE DATA; Schema: public; Owner: workstation
+--
+
+COPY public.birthdays (person, birthday) FROM stdin;
+Ken Thompson	1955-03-23
+Ben Johnson	1971-03-19
+Andy Gibson	1987-08-12
+\.
+
+
+--
+-- Data for Name: databases; Type: TABLE DATA; Schema: public; Owner: workstation
+--
+
+COPY public.databases (is_open_source, dbms_name) FROM stdin;
+t	PostgreSQL
+f	Oracle
+t	MySQL
+f	MS SQL Server
+\.
+
+
+--
 -- Data for Name: pilot_hobbies; Type: TABLE DATA; Schema: public; Owner: workstation
 --
 
@@ -155,11 +215,9 @@ Boris	{"trips": 0, "sports": ["хоккей"], "home_lib": true}
 -- Data for Name: pilots; Type: TABLE DATA; Schema: public; Owner: workstation
 --
 
-COPY public.pilots (pilot_name, schedule) FROM stdin;
-Boris	{3,5,6,7}
-Pavel	{1,2,5,6}
-Ivan	{1,3,6,7}
-Petr	{2,3,5,7}
+COPY public.pilots (pilor_name, schedule, meal) FROM stdin;
+Ivan	{1,2,3,4}	{{сосиска,макароны,кофе},{котлета,каша,кофе},{сосиска,каша,кофе},{котлета,каша,чай}}
+Oleg	{1,2,3,4}	{{сосиска,макароны,кофе},{котлета,суп,кофе},{сосиска,макароны,кофе},{котлета,каша,чай}}
 \.
 
 
@@ -208,6 +266,22 @@ SU9	20F	Economy
 
 
 --
+-- Data for Name: test_bool; Type: TABLE DATA; Schema: public; Owner: workstation
+--
+
+COPY public.test_bool (a, b) FROM stdin;
+t	yes
+t	true
+t	true
+t	true
+t	true
+t	true
+t	true
+t	true
+\.
+
+
+--
 -- Data for Name: test_numeric; Type: TABLE DATA; Schema: public; Owner: workstation
 --
 
@@ -225,10 +299,9 @@ COPY public.test_numeric (measurement, description) FROM stdin;
 
 COPY public.test_serial (id, name) FROM stdin;
 1	Вишневая
-2	Грушевая
-3	Зеленая
-13	Вишневая
-4	Луговая
+2	Прохладная
+3	Грушевая
+5	Луговая
 \.
 
 
@@ -236,7 +309,7 @@ COPY public.test_serial (id, name) FROM stdin;
 -- Name: test_serial_id_seq; Type: SEQUENCE SET; Schema: public; Owner: workstation
 --
 
-SELECT pg_catalog.setval('public.test_serial_id_seq', 4, true);
+SELECT pg_catalog.setval('public.test_serial_id_seq', 5, true);
 
 
 --
@@ -253,6 +326,14 @@ ALTER TABLE ONLY public.aircrafts
 
 ALTER TABLE ONLY public.seats
     ADD CONSTRAINT seats_pkey PRIMARY KEY (aircraft_code, seat_no);
+
+
+--
+-- Name: test_serial test_serial_pkey; Type: CONSTRAINT; Schema: public; Owner: workstation
+--
+
+ALTER TABLE ONLY public.test_serial
+    ADD CONSTRAINT test_serial_pkey PRIMARY KEY (id);
 
 
 --
